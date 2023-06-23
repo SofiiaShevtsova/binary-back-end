@@ -78,6 +78,7 @@ router.put(
   (req, res, next) => {
     try {
       if (!res.data) {
+        const id = req.params;
       }
     } catch (err) {
       res.err = err;
@@ -88,6 +89,18 @@ router.put(
   responseMiddleware
 );
 
-// TODO: Implement route controllers for user
+router.delete(
+  "/:id",
+  (req, res, next) => {
+    try {
+      const id = req.params;
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
 
 export { router };
