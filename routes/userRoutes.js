@@ -8,18 +8,40 @@ import { responseMiddleware } from "../middlewares/response.middleware.js";
 
 const router = Router();
 
+router.get(
+  "/",
+  (req, res, next) => {
+    try {
+      const data = userService.getAll();
+      if (!data) {
+        res.data = { message: "Can't find users!", status: 404 };
+      } else {
+        res.data = { data: data, status: 200 };
+      }
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
 router.post(
   "/",
   createUserValid,
   (req, res, next) => {
     try {
-      const data = userService.create(req.body);
-      if (!data) {
-        res.data = { message: "Can't create user or user exists!" };
-        res.status(400);
-      } else {
-        res.data = data;
-        res.status(201);
+      if (!res.data) {
+        const data = userService.create(req.body);
+        if (!data) {
+          res.data = {
+            message: "Can't create user or user exists!",
+            status: 400,
+          };
+        } else {
+          res.data = { data: data, status: 201 };
+        }
       }
     } catch (err) {
       res.err = err;

@@ -2,6 +2,14 @@ import { userRepository } from "../repositories/userRepository.js";
 
 class UserService {
   // TODO: Implement methods to work with user
+  getAll() {
+    const users = userRepository.getAll();
+    if (!users) {
+      return null;
+    }
+    return users;
+  }
+
   create(data) {
     const { email, phoneNumber } = data;
     const userExists =

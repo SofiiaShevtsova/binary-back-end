@@ -1,12 +1,11 @@
+import res from "express/lib/response.js";
 import { USER } from "../models/user.js";
 
-const HttpError = (message) => {
-  const error = new Error(message);
-  error.status = 400;
-  return error;
-};
-
 const createUserValid = (req, res, next) => {
+  const HttpError = (message) => {
+   return res.data = { message: message, status: 400 };
+  };
+
   const { firstName, lastName, email, phoneNumber, password } = req.body;
   const checkKeys = Object.keys(req.body).every((key) =>
     Object.keys(USER).includes(key)
