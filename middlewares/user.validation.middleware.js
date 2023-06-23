@@ -1,40 +1,54 @@
 import res from "express/lib/response.js";
 import { USER } from "../models/user.js";
 
-const createUserValid = (req, res, next) => {
-  const HttpError = (message) => {
-   return res.data = { message: message, status: 400 };
-  };
+const HttpError = (message, res) => {
+  return (res.data = { message: message, status: 400 });
+};
 
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
-  const checkKeys = Object.keys(req.body).every((key) =>
+const validate = (user, HttpError, res) => {
+  const { firstName, lastName, email, phoneNumber, password } = user;
+  const checkKeys = Object.keys(user).every((key) =>
     Object.keys(USER).includes(key)
   );
-  if (!firstName || !lastName || !email || !phoneNumber || !password) {
-    HttpError("You miss some fields!");
-  }
   if (!checkKeys) {
-    HttpError("You have unexpected fields!");
+    return HttpError("You have unexpected fields!", res);
   }
-  if (typeof firstName !== "string" || typeof lastName !== "string") {
-    HttpError("Incorrect enter name!");
+  if (
+    (firstName && typeof firstName !== "string") ||
+    (lastName && typeof lastName !== "string")
+  ) {
+    return HttpError("Incorrect enter name!", res);
   }
   const regexEmail = /\w+@gmail.\w{1,5}/;
-  const checkEmail = email.match(regexEmail);
-  if (!checkEmail) {
-    next(HttpError("Incorrect email!"));
+  const checkEmail = email && email.match(regexEmail);
+  if (email && !checkEmail) {
+      console.log("yes");
+
+    return HttpError("Incorrect email!", res);
   }
-  if (!(phoneNumber.startsWith("+380") && phoneNumber.length === 13)) {
-    HttpError("Incorrect phone number!");
+  if (
+    phoneNumber &&
+    !(phoneNumber.startsWith("+380") && phoneNumber.length === 13)
+  ) {
+    return HttpError("Incorrect phone number!", res);
   }
-  if (password.length < 3) {
-    HttpError("Incorrect password!");
+  if (password && password.length < 3) {
+    return HttpError("Incorrect password!", res);
   }
+};
+
+const createUserValid = (req, res, next) => {
+  const { firstName, lastName, email, phoneNumber, password } = req.body;
+
+  if (!firstName || !lastName || !email || !phoneNumber || !password) {
+    HttpError("You miss some fields!", res);
+  }
+  validate(req.body, HttpError, res);
   next();
 };
 
 const updateUserValid = (req, res, next) => {
-  // TODO: Implement validatior for user entity during update
+  validate(req.body, HttpError, res);
   next();
 };
 
