@@ -27,6 +27,26 @@ router.get(
   responseMiddleware
 );
 
+router.get(
+  "/:id",
+  (req, res, next) => {
+    try {
+      const id = req.params;
+      const data = userService.search(id);
+      if (!data) {
+        res.data = { message: "Can't find user!", status: 404 };
+      } else {
+        res.data = { data: data, status: 200 };
+      }
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
 router.post(
   "/",
   createUserValid,
@@ -42,6 +62,22 @@ router.post(
         } else {
           res.data = { data: data, status: 201 };
         }
+      }
+    } catch (err) {
+      res.err = err;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
+router.put(
+  "/:id",
+  updateUserValid,
+  (req, res, next) => {
+    try {
+      if (!res.data) {
       }
     } catch (err) {
       res.err = err;
