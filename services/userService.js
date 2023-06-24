@@ -33,6 +33,13 @@ class UserService {
   }
 
   update(id, data) {
+    const { email, phoneNumber } = data;
+    const userExists =
+      this.search({ email: email }) ||
+      this.search({ phoneNumber: phoneNumber });
+    if (userExists) {
+      return null;
+    }
     const updateUser = userRepository.update(id, data);
     if (!updateUser) {
       return null;

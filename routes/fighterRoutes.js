@@ -12,12 +12,12 @@ router.get(
   "/",
   async (req, res, next) => {
     try {
-      // const data = await userService.getAll();
-      // if (!data) {
-      //   res.data = { message: "Can't find users!", status: 404 };
-      // } else {
-      //   res.data = { data: data, status: 200 };
-      // }
+      const data = await fighterService.getAll();
+      if (!data) {
+        res.data = { message: "Can't find fighters!", status: 404 };
+      } else {
+        res.data = { data: data, status: 200 };
+      }
     } catch (err) {
       res.err = err;
     } finally {
@@ -31,13 +31,13 @@ router.get(
   "/:id",
   async (req, res, next) => {
     try {
-      // const { id } = req.params;
-      // const data = await userService.search({ id: id });
-      // if (!data) {
-      //   res.data = { message: "Can't find user!", status: 404 };
-      // } else {
-      //   res.data = { data: data, status: 200 };
-      // }
+      const { id } = req.params;
+      const data = await fighterService.search({ id: id });
+      if (!data) {
+        res.data = { message: "Can't find fighter!", status: 404 };
+      } else {
+        res.data = { data: data, status: 200 };
+      }
     } catch (err) {
       res.err = err;
     } finally {
@@ -77,18 +77,18 @@ router.put(
   updateFighterValid,
   async (req, res, next) => {
     try {
-      // if (!res.data) {
-      //   const { id } = req.params;
-      //   const updateUser = await userService.update(id, req.body);
-      //   if (!updateUser) {
-      //     res.data = {
-      //       message: "Can't find user!",
-      //       status: 404,
-      //     };
-      //   } else {
-      //     res.data = { data: updateUser, status: 201 };
-      //   }
-      // }
+      if (!res.data) {
+        const { id } = req.params;
+        const updateFighter = await fighterService.update(id, req.body);
+        if (!updateFighter) {
+          res.data = {
+            message: "Can't find fighter! Or this fighter name exists!",
+            status: 404,
+          };
+        } else {
+          res.data = { data: updateFighter, status: 201 };
+        }
+      }
     } catch (err) {
       res.err = err;
     } finally {
@@ -102,19 +102,19 @@ router.delete(
   "/:id",
   async (req, res, next) => {
     try {
-      // const { id } = req.params;
-      // const deleteUser = await userService.delete(id);
-      // if (!deleteUser) {
-      //   res.data = {
-      //     message: "Can't find user!",
-      //     status: 404,
-      //   };
-      // } else {
-      //   res.data = {
-      //     message: "User is deleted!",
-      //     status: 204,
-      //   };
-      // }
+      const { id } = req.params;
+      const deleteFighter = await fighterService.delete(id);
+      if (!deleteFighter) {
+        res.data = {
+          message: "Can't find fighter!",
+          status: 404,
+        };
+      } else {
+        res.data = {
+          message: "Fighter is deleted!",
+          status: 204,
+        };
+      }
     } catch (err) {
       res.err = err;
     } finally {

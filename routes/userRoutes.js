@@ -82,7 +82,8 @@ router.put(
         const updateUser = await userService.update(id, req.body);
         if (!updateUser) {
           res.data = {
-            message: "Can't find user!",
+            message:
+              "Can't find user! Or this email or phone number are exists!",
             status: 404,
           };
         } else {

@@ -2,11 +2,11 @@ import { fighterRepository } from "../repositories/fighterRepository.js";
 
 class FighterService {
   getAll() {
-    const users = userRepository.getAll();
-    if (!users) {
+    const fighters = fighterRepository.getAll();
+    if (!fighters) {
       return null;
     }
-    return users;
+    return fighters;
   }
 
   search(search) {
@@ -32,22 +32,25 @@ class FighterService {
   }
 
   update(id, data) {
-    const updateUser = userRepository.update(id, data);
-    if (!updateUser) {
+    const { name } = data;
+    const fighterExists = this.search({ name: name });
+    if (fighterExists) {
       return null;
     }
-    return updateUser;
+    const updateFighter = fighterRepository.update(id, data);
+    if (!updateFighter) {
+      return null;
+    }
+    return updateFighter;
   }
 
   delete(id) {
-    const deleteUser = userRepository.delete(id);
-    if (!deleteUser) {
+    const deleteFighter = fighterRepository.delete(id);
+    if (!deleteFighter) {
       return null;
     }
-    return deleteUser;
+    return deleteFighter;
   }
-
-  // TODO: Implement methods to work with fighters
 }
 
 const fighterService = new FighterService();
