@@ -3,17 +3,17 @@ import formatingString from "../helpers/formatString.js";
 import validationError from "../helpers/validationError.js";
 
 const validate = (fighter, res) => {
-  const { name, power, defense, health } = fighter;
-  if (name) {
-    fighter.name = formatingString(name);
+  if (fighter.name) {
+    fighter.name = formatingString(fighter.name);
   }
+  const { name, power, defense, health } = fighter;
   const checkKeys = Object.keys(fighter).every((key) =>
     Object.keys(FIGHTER).includes(key)
   );
   if (!checkKeys) {
     return validationError("You have unexpected fields!", res);
   }
-  if (name && (fighter.name.includes(" ") || typeof name !== "string")) {
+  if (name === null) {
     return validationError("Incorrect enter name!", res);
   }
   if (power === 0 || power <= 1 || power >= 100) {

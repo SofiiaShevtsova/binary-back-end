@@ -54,13 +54,13 @@ router.post(
     try {
       if (!res.data) {
         const data = await fighterService.create(req.body);
-        if (!data) {
+        if (typeof data === "string") {
           res.data = {
-            message: "Can't create fighter or fighter exists!",
+            message: data,
             status: 400,
           };
         } else {
-          res.data = { data: data, status: 201 };
+          res.data = { data: data, status: 200 };
         }
       }
     } catch (err) {
@@ -79,14 +79,14 @@ router.put(
     try {
       if (!res.data) {
         const { id } = req.params;
-        const updateFighter = await fighterService.update(id, req.body);
-        if (!updateFighter) {
+        const data = await fighterService.update(id, req.body);
+        if (typeof data === "string") {
           res.data = {
-            message: "Can't find fighter! Or this fighter name exists!",
-            status: 404,
+            message: data,
+            status: data === "Can't find fighter!" ? 404 : 400,
           };
         } else {
-          res.data = { data: updateFighter, status: 201 };
+          res.data = { data: data, status: 200 };
         }
       }
     } catch (err) {

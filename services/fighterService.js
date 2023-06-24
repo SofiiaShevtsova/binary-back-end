@@ -21,12 +21,12 @@ class FighterService {
     const { name, health } = data;
     const fighterExists = this.search({ name: name });
     if (fighterExists) {
-      return null;
+      return `Fighter ${name} exists!`;
     }
     data.health = health ?? 100;
     const newFighter = fighterRepository.create(data);
     if (!newFighter) {
-      return null;
+      return "Can't create fighter!";
     }
     return newFighter;
   }
@@ -35,20 +35,24 @@ class FighterService {
     const { name } = data;
     const fighterExists = this.search({ name: name });
     if (fighterExists) {
-      return null;
+      return `Fighter ${name} exists!`;
     }
     const fighterForUpdate = this.search({ id: id });
     if (!fighterForUpdate) {
-      return null;
+      return "Can't find fighter!";
     }
     const updateFighter = fighterRepository.update(id, data);
     if (!updateFighter) {
-      return null;
+      return "Can't find fighter!";
     }
     return updateFighter;
   }
 
   delete(id) {
+    const fighterForDelete = this.search({ id: id });
+    if (!fighterForDelete) {
+      return null;
+    }
     const deleteFighter = fighterRepository.delete(id);
     if (!deleteFighter) {
       return null;
