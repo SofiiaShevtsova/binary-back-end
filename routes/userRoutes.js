@@ -79,14 +79,14 @@ router.put(
     try {
       if (!res.data) {
         const { id } = req.params;
-        const responce = await userService.update(id, req.body);
-        if (typeof responce === "string") {
+        const data = await userService.update(id, req.body);
+        if (typeof data === "string") {
           res.data = {
-            message: responce,
-            status: responce === "User not found!" ? 404 : 400,
+            message: data,
+            status: data === "User not found!" ? 404 : 400,
           };
         } else {
-          res.data = { data: updateUser, status: 200 };
+          res.data = { data: data, status: 200 };
         }
       }
     } catch (err) {

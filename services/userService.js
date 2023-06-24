@@ -37,13 +37,15 @@ class UserService {
     const userExists =
       this.search({ email: email }) ||
       this.search({ phoneNumber: phoneNumber });
+
     if (userExists) {
       return "This email or phone number exists!";
     }
-    const updateUser = userRepository.update(id, data);
-    if (!updateUser) {
+    const user = this.search({ id: id });
+    if (!user) {
       return "User not found!";
     }
+    const updateUser = userRepository.update(id, data);
     return updateUser;
   }
 
