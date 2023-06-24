@@ -1,12 +1,59 @@
 import { USER } from "../models/user.js";
+import formatingString from "../helpers/formatString.js";
+import validationError from "../helpers/validationError.js";
+
+const validate = (user, res) => {
+  const { firstName, lastName, email, phoneNumber, password } = user;
+  user.firstName = firstName && formatingString(firstName);
+  user.lastName = lastName && formatingString(lastName);
+  const checkKeys = Object.keys(user).every((key) =>
+    Object.keys(USER).includes(key)
+  );
+  if (!checkKeys) {
+    return validationError("You have unexpected fields!", res);
+  }
+  if (
+    (firstName &&
+      (user.firstName.includes(" ") || typeof firstName !== "string")) ||
+    (lastName && (user.lastName.includes(" ") || typeof lastName !== "string"))
+  ) {
+    return validationError("Incorrect enter name!", res);
+  }
+  const regexEmail = /\w+@gmail.\w{1,5}/;
+  const checkEmail = email && email.match(regexEmail) && !email.includes(' ');
+  if (email && !checkEmail) {
+    return validationError("Incorrect email!", res);
+  }
+  if (
+    phoneNumber &&
+    !(
+      phoneNumber.startsWith("+380") &&
+      phoneNumber.length === 13 &&
+      !phoneNumber.includes(" ")
+    )
+  ) {
+    return validationError("Incorrect phone number!", res);
+  }
+  if (password && password.length < 3 && !password.includes(" ")) {
+    return validationError(
+      "Incorrect password! Password must be 3 symbol or more.",
+      res
+    );
+  }
+};
 
 const createUserValid = (req, res, next) => {
-  // TODO: Implement validatior for USER entity during creation
+  const { firstName, lastName, email, phoneNumber, password } = req.body;
+
+  if (!firstName || !lastName || !email || !phoneNumber || !password) {
+    validationError("You miss some fields!", res);
+  }
+  validate(req.body, res);
   next();
 };
 
 const updateUserValid = (req, res, next) => {
-  // TODO: Implement validatior for user entity during update
+  validate(req.body, res);
   next();
 };
 

@@ -8,6 +8,7 @@ router.post(
   "/login",
   (req, res, next) => {
     try {
+      console.log("auto");
       // TODO: Implement login action (get the user if it exist with entered credentials)
       res.data = data;
     } catch (err) {

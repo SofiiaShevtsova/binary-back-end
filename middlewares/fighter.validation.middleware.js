@@ -1,12 +1,45 @@
 import { FIGHTER } from "../models/fighter.js";
+import formatingString from "../helpers/formatString.js";
+import validationError from "../helpers/validationError.js";
+
+const validate = (fighter, res) => {
+  const { name, power, defense, health } = fighter;
+  if (name) {
+    fighter.name = formatingString(name);
+  }
+  const checkKeys = Object.keys(fighter).every((key) =>
+    Object.keys(FIGHTER).includes(key)
+  );
+  if (!checkKeys) {
+    return validationError("You have unexpected fields!", res);
+  }
+  if (name && (fighter.name.includes(" ") || typeof name !== "string")) {
+    return validationError("Incorrect enter name!", res);
+  }
+  if (power === 0 || power <= 1 || power >= 100) {
+    return validationError("Power must be a number 1-100!", res);
+  }
+  if (defense === 0 || defense <= 1 || defense >= 10) {
+    return validationError("Defense must be a number 1-10!", res);
+  }
+  if (health === 0 || health <= 80 || health >= 120) {
+    return validationError("Healht must be a number 80-120!", res);
+  }
+};
 
 const createFighterValid = (req, res, next) => {
-  // TODO: Implement validatior for FIGHTER entity during creation
+  const { name, power, defense } = req.body;
+
+  if (!name || !power || !defense) {
+    validationError("You miss some fields!", res);
+  }
+
+  validate(req.body, res);
   next();
 };
 
 const updateFighterValid = (req, res, next) => {
-  // TODO: Implement validatior for FIGHTER entity during update
+  validate(req.body, res);
   next();
 };
 
