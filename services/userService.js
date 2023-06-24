@@ -23,11 +23,11 @@ class UserService {
       this.search({ email: email }) ||
       this.search({ phoneNumber: phoneNumber });
     if (userExists) {
-      return null;
+      return "This email or phone number exists!";
     }
     const newUser = userRepository.create(data);
     if (!newUser) {
-      return null;
+      return "Can't create user!";
     }
     return newUser;
   }
@@ -38,11 +38,11 @@ class UserService {
       this.search({ email: email }) ||
       this.search({ phoneNumber: phoneNumber });
     if (userExists) {
-      return null;
+      return "This email or phone number exists!";
     }
     const updateUser = userRepository.update(id, data);
     if (!updateUser) {
-      return null;
+      return "User not found!";
     }
     return updateUser;
   }

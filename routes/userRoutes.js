@@ -54,10 +54,10 @@ router.post(
     try {
       if (!res.data) {
         const data = await userService.create(req.body);
-        if (!data) {
+        if (typeof data === "string") {
           res.data = {
-            message: "Can't create user or user exists!",
-            status: 400,
+            message: data,
+            status: data === "This email or phone number exists!" ? 400 : 404,
           };
         } else {
           res.data = { data: data, status: 201 };
@@ -79,12 +79,11 @@ router.put(
     try {
       if (!res.data) {
         const { id } = req.params;
-        const updateUser = await userService.update(id, req.body);
-        if (!updateUser) {
+        const responce = await userService.update(id, req.body);
+        if (typeof responce === "string") {
           res.data = {
-            message:
-              "Can't find user! Or this email or phone number are exists!",
-            status: 404,
+            message: responce,
+            status: responce === "User not found!" ? 404 : 400,
           };
         } else {
           res.data = { data: updateUser, status: 201 };

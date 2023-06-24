@@ -2,35 +2,28 @@ import { USER } from "../models/user.js";
 import formatingString from "../helpers/formatString.js";
 import validationError from "../helpers/validationError.js";
 
-const validate = (user, res) => {
-  const { firstName, lastName, email, phoneNumber, password } = user;
-  user.firstName = firstName && formatingString(firstName);
-  user.lastName = lastName && formatingString(lastName);
-  const checkKeys = Object.keys(user).every((key) =>
+const validate = (data, res) => {
+  data.firstName = data.firstName && formatingString(data.firstName);
+  data.lastName = data.lastName && formatingString(data.lastName);
+  const { firstName, lastName, email, phoneNumber, password } = data;
+
+  const checkKeys = Object.keys(data).every((key) =>
     Object.keys(USER).includes(key)
   );
   if (!checkKeys) {
     return validationError("You have unexpected fields!", res);
   }
-  if (
-    (firstName &&
-      (user.firstName.includes(" ") || typeof firstName !== "string")) ||
-    (lastName && (user.lastName.includes(" ") || typeof lastName !== "string"))
-  ) {
+  if (!firstName && !lastName ) {
     return validationError("Incorrect enter name!", res);
   }
-  const regexEmail = /\w+@gmail.\w{1,5}/;
-  const checkEmail = email && email.match(regexEmail) && !email.includes(' ');
+  const regexEmail = /\w+@gmail\.\w{1,5}/g;
+  const checkEmail = email && email.match(regexEmail) && !email.includes(" ");
   if (email && !checkEmail) {
     return validationError("Incorrect email!", res);
   }
   if (
     phoneNumber &&
-    !(
-      phoneNumber.startsWith("+380") &&
-      phoneNumber.length === 13 &&
-      !phoneNumber.includes(" ")
-    )
+    (!phoneNumber.match(/^\+380[0-9]{9}/i) || phoneNumber.length !== 13)
   ) {
     return validationError("Incorrect phone number!", res);
   }
