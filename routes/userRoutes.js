@@ -60,7 +60,7 @@ router.post(
             status: data === "This email or phone number exists!" ? 400 : 404,
           };
         } else {
-          res.data = { data: data, status: 201 };
+          res.data = { data: data, status: 200 };
         }
       }
     } catch (err) {
@@ -86,7 +86,7 @@ router.put(
             status: responce === "User not found!" ? 404 : 400,
           };
         } else {
-          res.data = { data: updateUser, status: 201 };
+          res.data = { data: updateUser, status: 200 };
         }
       }
     } catch (err) {
