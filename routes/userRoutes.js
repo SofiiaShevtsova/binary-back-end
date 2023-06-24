@@ -10,9 +10,9 @@ const router = Router();
 
 router.get(
   "/",
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const data = userService.getAll();
+      const data = await userService.getAll();
       if (!data) {
         res.data = { message: "Can't find users!", status: 404 };
       } else {
@@ -29,10 +29,10 @@ router.get(
 
 router.get(
   "/:id",
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const id = req.params;
-      const data = userService.search(id);
+      const { id } = req.params;
+      const data = await userService.search({ id: id });
       if (!data) {
         res.data = { message: "Can't find user!", status: 404 };
       } else {
@@ -50,10 +50,10 @@ router.get(
 router.post(
   "/",
   createUserValid,
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       if (!res.data) {
-        const data = userService.create(req.body);
+        const data = await userService.create(req.body);
         if (!data) {
           res.data = {
             message: "Can't create user or user exists!",
@@ -75,10 +75,19 @@ router.post(
 router.put(
   "/:id",
   updateUserValid,
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
       if (!res.data) {
-        const id = req.params;
+        const { id } = req.params;
+        const updateUser = await userService.update(id, req.body);
+        if (!updateUser) {
+          res.data = {
+            message: "Can't find user!",
+            status: 404,
+          };
+        } else {
+          res.data = { data: updateUser, status: 201 };
+        }
       }
     } catch (err) {
       res.err = err;
@@ -91,9 +100,21 @@ router.put(
 
 router.delete(
   "/:id",
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      const id = req.params;
+      const { id } = req.params;
+      const deleteUser = await userService.delete(id);
+      if (!deleteUser) {
+        res.data = {
+          message: "Can't find user!",
+          status: 404,
+        };
+      } else {
+        res.data = {
+          message: "User is deleted!",
+          status: 204,
+        };
+      }
     } catch (err) {
       res.err = err;
     } finally {

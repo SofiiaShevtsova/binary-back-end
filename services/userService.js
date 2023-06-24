@@ -1,7 +1,6 @@
 import { userRepository } from "../repositories/userRepository.js";
 
 class UserService {
-  // TODO: Implement methods to work with user
   getAll() {
     const users = userRepository.getAll();
     if (!users) {
@@ -10,11 +9,19 @@ class UserService {
     return users;
   }
 
+  search(search) {
+    const item = userRepository.getOne(search);
+    if (!item) {
+      return null;
+    }
+    return item;
+  }
+
   create(data) {
     const { email, phoneNumber } = data;
     const userExists =
-      userRepository.getOne({ email: email }) ||
-      userRepository.getOne({ phoneNumber: phoneNumber });
+      this.search({ email: email }) ||
+      this.search({ phoneNumber: phoneNumber });
     if (userExists) {
       return null;
     }
@@ -25,12 +32,20 @@ class UserService {
     return newUser;
   }
 
-  search(search) {
-    const item = userRepository.getOne(search);
-    if (!item) {
+  update(id, data) {
+    const updateUser = userRepository.update(id, data);
+    if (!updateUser) {
       return null;
     }
-    return item;
+    return updateUser;
+  }
+
+  delete(id) {
+    const deleteUser = userRepository.delete(id);
+    if (!deleteUser) {
+      return null;
+    }
+    return deleteUser;
   }
 }
 
