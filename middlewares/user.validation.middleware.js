@@ -13,23 +13,28 @@ const validate = (user, res) => {
     return validationError("You have unexpected fields!", res);
   }
   if (
-    (firstName && typeof firstName !== "string") ||
-    (lastName && typeof lastName !== "string")
+    (firstName &&
+      (user.firstName.includes(" ") || typeof firstName !== "string")) ||
+    (lastName && (user.lastName.includes(" ") || typeof lastName !== "string"))
   ) {
     return validationError("Incorrect enter name!", res);
   }
   const regexEmail = /\w+@gmail.\w{1,5}/;
-  const checkEmail = email && email.match(regexEmail);
+  const checkEmail = email && email.match(regexEmail) && !email.includes(' ');
   if (email && !checkEmail) {
     return validationError("Incorrect email!", res);
   }
   if (
     phoneNumber &&
-    !(phoneNumber.startsWith("+380") && phoneNumber.length === 13)
+    !(
+      phoneNumber.startsWith("+380") &&
+      phoneNumber.length === 13 &&
+      !phoneNumber.includes(" ")
+    )
   ) {
     return validationError("Incorrect phone number!", res);
   }
-  if (password && password.length < 3) {
+  if (password && password.length < 3 && !password.includes(" ")) {
     return validationError(
       "Incorrect password! Password must be 3 symbol or more.",
       res

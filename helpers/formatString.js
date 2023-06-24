@@ -1,4 +1,6 @@
- const formatingString = (string) =>
-  string.trim().toLowerCase().replace(string[0], string[0].toUpperCase());
-
-  export default formatingString
+const formatingString = (string) => {
+  const formatCase = string.trim().toLowerCase();
+  const newString = formatCase[0].toUpperCase() + formatCase.slice(1);
+  return newString;
+};
+export default formatingString;

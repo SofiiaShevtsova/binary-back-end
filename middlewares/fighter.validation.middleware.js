@@ -3,25 +3,26 @@ import formatingString from "../helpers/formatString.js";
 import validationError from "../helpers/validationError.js";
 
 const validate = (fighter, res) => {
-  const { name, power, defense, healht } = fighter;
-  fighter.name = name && formatingString(name);
+  const { name, power, defense, health } = fighter;
+  if (name) {
+    fighter.name = formatingString(name);
+  }
   const checkKeys = Object.keys(fighter).every((key) =>
     Object.keys(FIGHTER).includes(key)
   );
   if (!checkKeys) {
     return validationError("You have unexpected fields!", res);
   }
-  if (name && typeof name !== "string") {
+  if (name && (fighter.name.includes(" ") || typeof name !== "string")) {
     return validationError("Incorrect enter name!", res);
   }
-  if (power && power <= 1 && !power >= 100) {
-    console.log(power <= 100);
+  if (power === 0 || power <= 1 || power >= 100) {
     return validationError("Power must be a number 1-100!", res);
   }
-  if (defense && defense <= 1 && defense >= 10) {
+  if (defense === 0 || defense <= 1 || defense >= 10) {
     return validationError("Defense must be a number 1-10!", res);
   }
-  if (healht && healht <= 80 && healht >= 120) {
+  if (health === 0 || health <= 80 || health >= 120) {
     return validationError("Healht must be a number 80-120!", res);
   }
 };

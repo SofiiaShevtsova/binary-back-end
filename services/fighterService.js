@@ -37,6 +37,10 @@ class FighterService {
     if (fighterExists) {
       return null;
     }
+    const fighterForUpdate = this.search({ id: id });
+    if (!fighterForUpdate) {
+      return null;
+    }
     const updateFighter = fighterRepository.update(id, data);
     if (!updateFighter) {
       return null;
