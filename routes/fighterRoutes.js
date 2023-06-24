@@ -13,9 +13,6 @@ router.get(
   async (req, res, next) => {
     try {
       const data = await fighterService.getAll();
-      if (!data) {
-        throw new Error("Can't find fighters!");
-      }
       res.data = { data: data, status: 200 };
     } catch (err) {
       res.data = { message: err.message, status: 404 };
@@ -31,10 +28,7 @@ router.get(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const data = await fighterService.search({ id: id });
-      if (!data) {
-        throw new Error("Can't find fighter!");
-      }
+      const data = await fighterService.getOne(id);
       res.data = { data: data, status: 200 };
     } catch (err) {
       res.data = { message: err.message, status: 404 };
@@ -50,14 +44,10 @@ router.post(
   createFighterValid,
   async (req, res, next) => {
     try {
-      console.log("yes");
       if (res.err) {
         throw new Error(res.err.message);
       }
       const data = await fighterService.create(req.body);
-      if (typeof data === "string") {
-        throw new Error(data);
-      }
       res.data = { data: data, status: 200 };
     } catch (err) {
       res.data = { message: err.message, status: 400 };
@@ -78,9 +68,6 @@ router.put(
       }
       const { id } = req.params;
       const data = await fighterService.update(id, req.body);
-      if (typeof data === "string") {
-        throw new Error(data);
-      }
       res.data = { data: data, status: 200 };
     } catch (err) {
       res.data = {
@@ -99,10 +86,7 @@ router.delete(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const deleteFighter = await fighterService.delete(id);
-      if (!deleteFighter) {
-        throw new Error("Can't find fighter!");
-      }
+      await fighterService.delete(id);
       res.data = {
         message: "Fighter is deleted!",
         status: 204,
