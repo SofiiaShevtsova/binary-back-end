@@ -1,5 +1,5 @@
 const validationError = (message, res) => {
-  return (res.data = { message: message, status: 400 });
+  return (res.err = { message: message});
 };
 
 export default validationError
