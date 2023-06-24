@@ -5,7 +5,7 @@ const HttpError = (message, res) => {
   return (res.data = { message: message, status: 400 });
 };
 
-const validate = (user, HttpError, res) => {
+const validate = (user, res) => {
   const { firstName, lastName, email, phoneNumber, password } = user;
   const checkKeys = Object.keys(user).every((key) =>
     Object.keys(USER).includes(key)
@@ -22,8 +22,6 @@ const validate = (user, HttpError, res) => {
   const regexEmail = /\w+@gmail.\w{1,5}/;
   const checkEmail = email && email.match(regexEmail);
   if (email && !checkEmail) {
-      console.log("yes");
-
     return HttpError("Incorrect email!", res);
   }
   if (
@@ -33,7 +31,7 @@ const validate = (user, HttpError, res) => {
     return HttpError("Incorrect phone number!", res);
   }
   if (password && password.length < 3) {
-    return HttpError("Incorrect password!", res);
+    return HttpError("Incorrect password! Password must be 3 symbol or more.", res);
   }
 };
 
@@ -43,12 +41,12 @@ const createUserValid = (req, res, next) => {
   if (!firstName || !lastName || !email || !phoneNumber || !password) {
     HttpError("You miss some fields!", res);
   }
-  validate(req.body, HttpError, res);
+  validate(req.body, res);
   next();
 };
 
 const updateUserValid = (req, res, next) => {
-  validate(req.body, HttpError, res);
+  validate(req.body, res);
   next();
 };
 
