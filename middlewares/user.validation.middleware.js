@@ -3,8 +3,12 @@ import formatingString from "../helpers/formatString.js";
 import validationError from "../helpers/validationError.js";
 
 const validate = (data, res) => {
-  data.firstName = data.firstName && formatingString(data.firstName);
-  data.lastName = data.lastName && formatingString(data.lastName);
+  if (data.firstName) {
+    data.firstName = formatingString(data.firstName);
+  }
+  if (data.lastName) {
+    data.lastName = formatingString(data.lastName);
+  }
   const { firstName, lastName, email, phoneNumber, password } = data;
 
   const checkKeys = Object.keys(data).every((key) =>
@@ -13,7 +17,7 @@ const validate = (data, res) => {
   if (!checkKeys) {
     return validationError("You have unexpected fields!", res);
   }
-  if (!firstName && !lastName ) {
+  if (firstName === null || lastName === null) {
     return validationError("Incorrect enter name!", res);
   }
   const regexEmail = /\w+@gmail\.\w{1,5}/g;
@@ -46,6 +50,10 @@ const createUserValid = (req, res, next) => {
 };
 
 const updateUserValid = (req, res, next) => {
+  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  if (!firstName && !lastName && !email && !phoneNumber && !password) {
+    validationError("You miss fields!", res);
+  }
   validate(req.body, res);
   next();
 };
