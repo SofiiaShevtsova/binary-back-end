@@ -4,8 +4,10 @@ import { getFighters } from '../../services/domainRequest/fightersRequest';
 import NewFighter from '../newFighter';
 import Fighter from '../fighter';
 import { Button } from '@material-ui/core';
+import renderArena from '../../services/javascriptForGame/components/arena';
 
 import './fight.css'
+import '../../services/javascriptForGame/styles/styles.css'
 
 class Fight extends React.Component {
     state = {
@@ -22,7 +24,7 @@ class Fight extends React.Component {
     }
 
     onFightStart = () => {
-        
+        renderArena([this.state.fighter1, this.state.fighter2])
     }
 
     onCreate = (fighter) => {
