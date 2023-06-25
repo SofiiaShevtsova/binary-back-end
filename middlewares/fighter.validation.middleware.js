@@ -16,13 +16,23 @@ const validate = (fighter, res) => {
   if (name === null) {
     return validationError("Incorrect enter name!", res);
   }
-  if (power === 0 || power <= 1 || power >= 100) {
+  if (typeof power !== "number" || power === 0 || power <= 1 || power >= 100) {
     return validationError("Power must be a number 1-100!", res);
   }
-  if (defense === 0 || defense <= 1 || defense >= 10) {
+  if (
+    typeof defense !== "number" ||
+    defense === 0 ||
+    defense <= 1 ||
+    defense >= 10
+  ) {
     return validationError("Defense must be a number 1-10!", res);
   }
-  if (health === 0 || health <= 80 || health >= 120) {
+  if (
+    typeof health !== "number" ||
+    health === 0 ||
+    health <= 80 ||
+    health >= 120
+  ) {
     return validationError("Healht must be a number 80-120!", res);
   }
 };
