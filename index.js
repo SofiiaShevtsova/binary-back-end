@@ -16,7 +16,6 @@ app.use("/", express.static("./client/build"));
 
 const port = 3050;
 app.listen(port, () => {
-    console.log("all working!!!");
 });
 
 export { app };
