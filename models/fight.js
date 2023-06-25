@@ -1,5 +1,6 @@
 const FIGHT = {
   id: "",
+  date:"",
   fighter1: "id",
   fighter2: "id",
   log: [
@@ -10,6 +11,7 @@ const FIGHT = {
     //     "fighter2Health": 0
     // }
   ],
+  winner:"",
 };
 
 export { FIGHT };
