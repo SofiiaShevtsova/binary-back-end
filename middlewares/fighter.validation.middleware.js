@@ -39,6 +39,12 @@ const createFighterValid = (req, res, next) => {
 };
 
 const updateFighterValid = (req, res, next) => {
+  const { name, power, defense } = req.body;
+
+  if (!name && !power && !defense) {
+    validationError("You miss fields!", res);
+  }
+
   validate(req.body, res);
   next();
 };

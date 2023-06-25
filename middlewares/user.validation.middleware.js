@@ -4,10 +4,10 @@ import validationError from "../helpers/validationError.js";
 
 const validate = (data, res) => {
   if (data.firstName) {
-  data.firstName = formatingString(data.firstName);
+    data.firstName = formatingString(data.firstName);
   }
   if (data.lastName) {
-  data.lastName = formatingString(data.lastName);
+    data.lastName = formatingString(data.lastName);
   }
   const { firstName, lastName, email, phoneNumber, password } = data;
 
@@ -50,6 +50,10 @@ const createUserValid = (req, res, next) => {
 };
 
 const updateUserValid = (req, res, next) => {
+  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  if (!firstName && !lastName && !email && !phoneNumber && !password) {
+    validationError("You miss fields!", res);
+  }
   validate(req.body, res);
   next();
 };
