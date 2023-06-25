@@ -14,7 +14,7 @@ const validate = (data, res) => {
   const checkKeys = Object.keys(data).every((key) =>
     Object.keys(USER).includes(key)
   );
-  if (!checkKeys) {
+  if (!checkKeys || data.id) {
     return validationError("You have unexpected fields!", res);
   }
   if (firstName === null || lastName === null) {

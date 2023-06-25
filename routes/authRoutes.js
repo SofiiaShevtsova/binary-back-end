@@ -6,13 +6,12 @@ const router = Router();
 
 router.post(
   "/login",
-  (req, res, next) => {
+  async (req, res, next) => {
     try {
-      console.log("auto");
-      // TODO: Implement login action (get the user if it exist with entered credentials)
-      res.data = data;
+      const data = await authService.login(req.body)
+      res.data = { data: data, status: 200 };
     } catch (err) {
-      res.err = err;
+      res.data = { message: err.message, status: 404, error: true };
     } finally {
       next();
     }
