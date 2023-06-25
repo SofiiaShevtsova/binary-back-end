@@ -10,7 +10,7 @@ const validate = (fighter, res) => {
   const checkKeys = Object.keys(fighter).every((key) =>
     Object.keys(FIGHTER).includes(key)
   );
-  if (!checkKeys) {
+  if (!checkKeys || fighter.id) {
     return validationError("You have unexpected fields!", res);
   }
   if (name === null) {
