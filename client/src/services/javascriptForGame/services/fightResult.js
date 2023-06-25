@@ -30,6 +30,6 @@ class FightResult {
   }
 }
 
-const fightResults = new FightState();
+const fightResults = new FightResult();
 
 export default fightResults;

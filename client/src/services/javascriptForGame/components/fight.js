@@ -2,7 +2,7 @@ import controls from "../constants/controls";
 import fightState from "../services/fightState";
 import showControlsInfo from "./showControls";
 import fightResults from "../services/fightResult";
-import { createFight } from "../../../domainRequest/fightRequest";
+import { createFight } from "../../domainRequest/fightRequest";
 
 const pressed = new Set();
 const idThrottle = {
@@ -59,13 +59,15 @@ function showDamage(attacker, defender, position, critical = false) {
   const damage = critical ? attacker.power * 2 : getDamage(attacker, defender);
   const loseHealth = (100 / defender.health) * damage;
   fightState.setHealth(loseHealth, position);
-  fightResults.setLog({
-    time: `${new Date().toLocaleTimeString()}`,
-    damage:
-      position === "left"
-        ? `fighter2Shot: ${loseHealth}`
-        : `fighter1Shot: ${loseHealth}`,
-  });
+  if (loseHealth !== 0) {
+    fightResults.setLog({
+      time: `${new Date().toLocaleTimeString()}`,
+      damage:
+        position === "left"
+          ? `fighter2Shot: ${loseHealth}`
+          : `fighter1Shot: ${loseHealth}`,
+    });
+  }
   document.querySelector(`#${position}-fighter-indicator`).style.width = `${
     fightState.getHealth()[position]
   }%`;
