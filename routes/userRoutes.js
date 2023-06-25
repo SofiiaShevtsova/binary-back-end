@@ -13,13 +13,9 @@ router.get(
   async (req, res, next) => {
     try {
       const data = await userService.getAll();
-      if (!data) {
-        res.data = { message: "Can't find users!", status: 404 };
-      } else {
-        res.data = { data: data, status: 200 };
-      }
+      res.data = { data: data, status: 200 };
     } catch (err) {
-      res.err = err;
+      res.data = { message: err.message, status: 404 };
     } finally {
       next();
     }
@@ -32,14 +28,10 @@ router.get(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      const data = await userService.search({ id: id });
-      if (!data) {
-        res.data = { message: "Can't find user!", status: 404 };
-      } else {
-        res.data = { data: data, status: 200 };
-      }
+      const data = await userService.getOne(id);
+      res.data = { data: data, status: 200 };
     } catch (err) {
-      res.err = err;
+      res.data = { message: err.message, status: 404 };
     } finally {
       next();
     }
@@ -52,19 +44,13 @@ router.post(
   createUserValid,
   async (req, res, next) => {
     try {
-      if (!res.data) {
-        const data = await userService.create(req.body);
-        if (typeof data === "string") {
-          res.data = {
-            message: data,
-            status: data === "This email or phone number exists!" ? 400 : 404,
-          };
-        } else {
-          res.data = { data: data, status: 200 };
-        }
+      if (res.err) {
+        throw new Error(res.err.message);
       }
+      const data = await userService.create(req.body);
+      res.data = { data: data, status: 200 };
     } catch (err) {
-      res.err = err;
+      res.data = { message: err.message, status: 400 };
     } finally {
       next();
     }
@@ -77,20 +63,17 @@ router.put(
   updateUserValid,
   async (req, res, next) => {
     try {
-      if (!res.data) {
-        const { id } = req.params;
-        const data = await userService.update(id, req.body);
-        if (typeof data === "string") {
-          res.data = {
-            message: data,
-            status: data === "User not found!" ? 404 : 400,
-          };
-        } else {
-          res.data = { data: data, status: 200 };
-        }
+      if (res.err) {
+        throw new Error(res.err.message);
       }
+      const { id } = req.params;
+      const data = await userService.update(id, req.body);
+      res.data = { data: data, status: 200 };
     } catch (err) {
-      res.err = err;
+      res.data = {
+        message: err.message,
+        status: err.message === "User not found!" ? 404 : 400,
+      };
     } finally {
       next();
     }
@@ -104,19 +87,12 @@ router.delete(
     try {
       const { id } = req.params;
       const deleteUser = await userService.delete(id);
-      if (!deleteUser) {
-        res.data = {
-          message: "Can't find user!",
-          status: 404,
-        };
-      } else {
-        res.data = {
-          message: "User is deleted!",
-          status: 204,
-        };
-      }
+      res.data = {
+        message: "User is deleted!",
+        status: 204,
+      };
     } catch (err) {
-      res.err = err;
+      res.data = { message: err.message, status: 404 };
     } finally {
       next();
     }
