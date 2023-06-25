@@ -20,7 +20,7 @@ export default function showWinnerModal(fighter) {
     if (fighter) {
         winnerModal.title = `${fighter.name} win this battle!`;
         const attributes = {
-            src: fighter.source,
+            src: "https://66.media.tumblr.com/tumblr_lq8g3548bC1qd0wh3o1_400.gif",
             title: fighter.name,
             alt: fighter.name,
             height: '60%'
