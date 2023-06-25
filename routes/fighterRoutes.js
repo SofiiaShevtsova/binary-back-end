@@ -15,7 +15,7 @@ router.get(
       const data = await fighterService.getAll();
       res.data = { data: data, status: 200 };
     } catch (err) {
-      res.data = { message: err.message, status: 404 };
+      res.data = { message: err.message, status: 404, error: true };
     } finally {
       next();
     }
@@ -31,7 +31,7 @@ router.get(
       const data = await fighterService.getOne(id);
       res.data = { data: data, status: 200 };
     } catch (err) {
-      res.data = { message: err.message, status: 404 };
+      res.data = { message: err.message, status: 404, error: true };
     } finally {
       next();
     }
@@ -50,7 +50,7 @@ router.post(
       const data = await fighterService.create(req.body);
       res.data = { data: data, status: 200 };
     } catch (err) {
-      res.data = { message: err.message, status: 400 };
+      res.data = { message: err.message, status: 400, error: true };
     } finally {
       next();
     }
@@ -73,6 +73,7 @@ router.put(
       res.data = {
         message: err.message,
         status: err.message === "Can't find fighter!" ? 404 : 400,
+        error: true
       };
     } finally {
       next();
@@ -92,7 +93,7 @@ router.delete(
         status: 204,
       };
     } catch (err) {
-      res.data = { message: err.message, status: 404 };
+      res.data = { message: err.message, status: 404, error: true };
     } finally {
       next();
     }
