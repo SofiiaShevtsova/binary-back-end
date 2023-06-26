@@ -9,6 +9,9 @@ const validate = (data, res) => {
   if (data.lastName) {
     data.lastName = formatingString(data.lastName);
   }
+  if (data.password) {
+    data.password = formatingString(data.password);
+  }
   const { firstName, lastName, email, phoneNumber, password } = data;
 
   const checkKeys = Object.keys(data).every((key) =>
@@ -18,7 +21,10 @@ const validate = (data, res) => {
     return validationError("You have unexpected fields!", res);
   }
   if (firstName === null || lastName === null) {
-    return validationError("Incorrect enter name!", res);
+    return validationError(
+      "Incorrect enter name! The name must be less than 15 characters and contain no spaces.",
+      res
+    );
   }
   const regexEmail = /\w+@gmail\.\w{1,5}/g;
   const checkEmail = email && email.match(regexEmail) && !email.includes(" ");
@@ -31,9 +37,9 @@ const validate = (data, res) => {
   ) {
     return validationError("Incorrect phone number!", res);
   }
-  if (password && password.length < 3 && !password.includes(" ")) {
+  if (password === null && password.length < 3) {
     return validationError(
-      "Incorrect password! Password must be 3 symbol or more.",
+      "Incorrect password! The password must be 3-15 characters and contain no spaces.",
       res
     );
   }
