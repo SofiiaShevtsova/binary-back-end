@@ -14,7 +14,10 @@ const validate = (fighter, res) => {
     return validationError("You have unexpected fields!", res);
   }
   if (name === null) {
-    return validationError("Incorrect enter name!", res);
+    return validationError(
+      "Incorrect enter name! The name must be less than 15 characters and contain no spaces.",
+      res
+    );
   }
   if (typeof power !== "number" || power === 0 || power <= 1 || power >= 100) {
     return validationError("Power must be a number 1-100!", res);
